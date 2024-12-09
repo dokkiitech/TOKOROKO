@@ -69,23 +69,3 @@ export async function signup(formData: FormData) {
     // トップページへリダイレクト
     redirect('/')
 }
-
-/**
- * ログアウト
- *
- * ログアウトが成功した場合はトップページへリダイレクトする。
- *
- * @returns void
- */
-export async function logout() {
-    const supabase = createClient()
-
-    const { error } = await supabase.auth.signOut()
-
-    if (error) {
-        console.error('ログアウトに失敗しました:', error.message)
-        return
-    }
-
-    redirect('/login')
-}
