@@ -2,6 +2,7 @@
 
 import { login, signup, githubLogin } from './actions';
 
+
 export default function LoginPage() {
     const handleLogin = async (formData: FormData) => {
         try {

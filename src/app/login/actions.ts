@@ -14,19 +14,13 @@ export async function login(formData: FormData) {
         password: formData.get('password') as string,
     };
 
-    try {
-        const { error } = await supabase.auth.signInWithPassword(data);
-        if (error) {
-
-            redirect('/error');
-        }
-
-        revalidatePath('/');
-        redirect('/');
-    } catch (e) {
-
-        redirect('/error');
-    }
+  
+    await supabase.auth.signInWithPassword(data);
+    
+   
+    console.log('Login successful, redirecting to /map');
+    redirect('/map');
+   
 }
 
 /**
@@ -40,19 +34,11 @@ export async function signup(formData: FormData) {
         password: formData.get('password') as string,
     };
 
-    try {
-        const { error } = await supabase.auth.signUp(data);
-        if (error) {
 
-            redirect('/error');
-        }
-
-        revalidatePath('/');
-        redirect('/');
-    } catch (e) {
-
-        redirect('/error');
-    }
+    await supabase.auth.signUp(data);
+      
+    redirect('/map');
+ 
 }
 
 /**
@@ -61,24 +47,21 @@ export async function signup(formData: FormData) {
 export async function githubLogin() {
     const supabase = createClient();
 
-    try {
+    
 
-        const { data, error } = await supabase.auth.signInWithOAuth({
-            provider: 'github',
-        });
+    const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'github',
+    });
 
-        if (error) {
-
-            redirect('/error');
-        } else if (data?.url) {
-
-            // サーバー側でリダイレクトを行わないようにしてURLを返す
-            return { url: data.url };
-        }
-    } catch (e) {
+    if (error) {
 
         redirect('/error');
+    } else if (data?.url) {
+
+        // サーバー側でリダイレクトを行わないようにしてURLを返す
+        return { url: data.url };
     }
+ 
 }
 
 /**
@@ -87,20 +70,14 @@ export async function githubLogin() {
 export async function logout() {
     const supabase = createClient();
 
-    try {
+ 
 
-        const { error } = await supabase.auth.signOut();
+    await supabase.auth.signOut();
 
-        if (error) {
-
-            redirect('/error');
-        }
+  
 
 
-        revalidatePath('/');
-        redirect('/');
-    } catch (e) {
-
-        redirect('/error');
-    }
+        
+    redirect('/login');
+  
 }
