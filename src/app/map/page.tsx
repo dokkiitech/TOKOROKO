@@ -6,6 +6,10 @@ import 'leaflet/dist/leaflet.css';
 
 export default function Map() {
     useEffect(() => {
+        if (L.DomUtil.get('map') !== null) {
+            L.DomUtil.get('map')._leaflet_id = null;
+        }
+
         const map = L.map('map').setView([33.5902, 130.4017], 13); // 初期位置を福岡県に設定
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {

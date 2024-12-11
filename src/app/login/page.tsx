@@ -1,74 +1,94 @@
 'use client';
 
 import { login, signup, githubLogin } from './actions';
-
+import './LoginPage.css';
 
 export default function LoginPage() {
     const handleLogin = async (formData: FormData) => {
         try {
-
             await login(formData);
-
         } catch (error) {
-
+            console.error('Login error:', error);
         }
     };
 
     const handleSignup = async (formData: FormData) => {
         try {
-
             await signup(formData);
-
         } catch (error) {
-
+            console.error('Signup error:', error);
         }
     };
 
     const handleGithubLogin = async () => {
         try {
-
             const result = await githubLogin();
             if (result?.url) {
-
                 window.location.href = result.url; // クライアントサイドでリダイレクト
             }
         } catch (error) {
-
+            console.error('GitHub login error:', error);
         }
     };
 
     return (
-        <div>
-            <h1>ログイン</h1>
-            <form
-                onSubmit={async (e) => {
+        <div className="container">
+            <div className="logo-container">
+                <h2 className="title">Sign in to your account</h2>
+            </div>
+
+            <div className="form-container">
+                <form className="form" onSubmit={async (e) => {
                     e.preventDefault();
                     const formData = new FormData(e.target as HTMLFormElement);
                     await handleLogin(formData);
-                }}
-            >
-                <label htmlFor="login-email">Email:</label>
-                <input id="login-email" name="email" type="email" required />
-                <label htmlFor="login-password">Password:</label>
-                <input id="login-password" name="password" type="password" required />
-                <button type="submit">Log in</button>
-            </form>
+                }}>
+                    <div className="form-group">
+                        <label htmlFor="login-email" className="label">Email address</label>
+                        <input id="login-email" name="email" type="email" autoComplete="email" required className="input" />
+                    </div>
 
-            <form
-                onSubmit={async (e) => {
+                    <div className="form-group">
+                        <label htmlFor="login-password" className="label">Password</label>
+                        <input id="login-password" name="password" type="password" autoComplete="current-password" required className="input" />
+                    </div>
+
+                    <div className="form-group">
+                        <button type="submit" className="button">Log in</button>
+                    </div>
+                </form>
+
+                <div className="form-group">
+                    <button onClick={handleGithubLogin} className="button github-button">Log in with GitHub</button>
+                </div>
+
+                <p className="text">
+                    Not a member?{' '}
+                    <a href="#" className="link">Sign up</a>
+                </p>
+            </div>
+
+            <div className="form-container">
+                <form className="form" onSubmit={async (e) => {
                     e.preventDefault();
                     const formData = new FormData(e.target as HTMLFormElement);
                     await handleSignup(formData);
-                }}
-            >
-                <label htmlFor="signup-email">Email:</label>
-                <input id="signup-email" name="email" type="email" required />
-                <label htmlFor="signup-password">Password:</label>
-                <input id="signup-password" name="password" type="password" required />
-                <button type="submit">Sign up</button>
-            </form>
+                }}>
+                    <div className="form-group">
+                        <label htmlFor="signup-email" className="label">Email address</label>
+                        <input id="signup-email" name="email" type="email" autoComplete="email" required className="input" />
+                    </div>
 
-            <button onClick={handleGithubLogin}>GitHubでログイン</button>
+                    <div className="form-group">
+                        <label htmlFor="signup-password" className="label">Password</label>
+                        <input id="signup-password" name="password" type="password" autoComplete="current-password" required className="input" />
+                    </div>
+
+                    <div className="form-group">
+                        <button type="submit" className="button">Sign up</button>
+                    </div>
+                </form>
+            </div>
         </div>
     );
 }
