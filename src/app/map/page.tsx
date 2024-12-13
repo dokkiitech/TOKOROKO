@@ -5,6 +5,8 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { logout } from '../login/actions';
 import Image from 'next/image';
+import './MapPage.css';
+
 
 
 delete L.Icon.Default.prototype._getIconUrl;
@@ -131,34 +133,10 @@ export default function Map() {
                 </div>
             )}
 
-            /* ダイアログの表示 */
+            {/* ダイアログの表示 */}
             {selectedLocation && (
-                <div
-                    onClick={handleCloseDialog}
-                    style={{
-                        position: 'fixed',
-                        top: 0,
-                        left: 0,
-                        width: '100%',
-                        height: '100%',
-                        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                        zIndex: 2000,
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                    }}
-                >
-                    <div
-                        onClick={(e) => e.stopPropagation()}
-                        style={{
-                            backgroundColor: '#fff',
-                            padding: '20px',
-                            borderRadius: '8px',
-                            maxWidth: '90%',
-                            maxHeight: '90%',
-                            overflowY: 'auto',
-                        }}
-                    >
+                <div onClick={handleCloseDialog} className="dialog-overlay">
+                    <div onClick={(e) => e.stopPropagation()} className="dialog-content">
                         <h2>{selectedLocation.name}</h2>
                         <Image
                             src={selectedLocation.imageUrl}
@@ -167,7 +145,7 @@ export default function Map() {
                             height={400}
                         />
                         <p>{selectedLocation.description}</p>
-                        <button onClick={handleCloseDialog}>閉じる</button>
+                        <button onClick={handleCloseDialog} className="close-button">閉じる</button>
                     </div>
                 </div>
             )}
