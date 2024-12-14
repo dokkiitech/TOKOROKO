@@ -22,7 +22,6 @@ export async function login(formData: FormData) {
         redirect('/error')
     }
 
-   
     redirect('/map')
 }
 

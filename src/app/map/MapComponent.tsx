@@ -6,6 +6,9 @@ import 'leaflet/dist/leaflet.css';
 import { logout } from '../login/actionsLogout';
 import Image from 'next/image';
 import './MapPage.css';
+import { useSession } from '@supabase/auth-helpers-react';
+import { supabase } from './supabaseClient';
+import Cookies from 'js-cookie';
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -22,6 +25,7 @@ export default function Map() {
     const [selectedLocation, setSelectedLocation] = useState(null);
     const [showBadge, setShowBadge] = useState(false);
     const [animateBadge, setAnimateBadge] = useState(false);
+    const session = useSession();
 
     useEffect(() => {
         if (activeTab === 'map') {
@@ -110,14 +114,47 @@ export default function Map() {
         setShowBadge(false);
     };
 
-    const handleShowBadge = () => {
+    const handleShowBadge = async () => {
+        if (!session) {
+            alert('ログインが必要です');
+            return;
+        }
+
+        const userId = Cookies.get('uid');
+
+        // NFTのパスに基づいてNFT IDを取得
+        const { data: nftData, error: nftError } = await supabase
+            .from('nft')
+            .select('id')
+            .eq('image_path', selectedLocation.badge)
+            .single();
+
+        if (nftError || !nftData) {
+            console.error('NFT情報の取得に失敗しました:', nftError);
+            alert('バッジ情報を保存できませんでした');
+            return;
+        }
+
+        // 中間テーブルに挿入
+        const { error: insertError } = await supabase
+            .from('nfts_users')
+            .insert({ user_id: userId, nft_id: nftData.id });
+
+        if (insertError) {
+            console.error('中間テーブルへの挿入に失敗しました:', insertError);
+            alert('バッジ情報を保存できませんでした');
+            return;
+        }
+
+        // アニメーション処理
         setShowBadge(true);
-        setAnimateBadge(true); 
+        setAnimateBadge(true);
     };
 
     const handleBadgeAnimationEnd = () => {
         setAnimateBadge(false);
-        setShowBadge(false); 
+        setShowBadge(false);
+        alert('バッジを保存しました！');
     };
 
     return (
