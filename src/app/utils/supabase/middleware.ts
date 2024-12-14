@@ -33,7 +33,7 @@ export async function updateSession(request: NextRequest) {
 
     if (user) {
         console.log('Logged in user:', user);
-        supabaseResponse.cookies.set('uid', user.user.id, { httpOnly: true, secure: true });
+        supabaseResponse.cookies.set('uid', user.user.id, { httpOnly: false, secure: true });
         console.log("success");
     } else {
         console.log('No user logged in');

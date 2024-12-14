@@ -6,18 +6,14 @@ import 'leaflet/dist/leaflet.css';
 import { logout } from '../login/actionsLogout';
 import Image from 'next/image';
 import './MapPage.css';
-import { useSession } from '@supabase/auth-helpers-react';
 import { supabase } from './supabaseClient';
 import Cookies from 'js-cookie';
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
-    iconRetinaUrl:
-        'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
-    iconUrl:
-        'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
-    shadowUrl:
-        'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+    iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
+    iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
+    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
 });
 
 export default function Map() {
@@ -25,7 +21,7 @@ export default function Map() {
     const [selectedLocation, setSelectedLocation] = useState(null);
     const [showBadge, setShowBadge] = useState(false);
     const [animateBadge, setAnimateBadge] = useState(false);
-    const session = useSession();
+    const [galleryImages, setGalleryImages] = useState([]); // ギャラリー画像の状態
 
     useEffect(() => {
         if (activeTab === 'map') {
@@ -61,6 +57,14 @@ export default function Map() {
                     description: '宮地嶽神社は光の道で有名な神社です。',
                     badge: '/images/miyajidake.png',
                 },
+                {
+                    name: 'TOKOROKO',
+                    coords: [33.88235560077813, 130.88067377015054],
+                    imageUrl: '/images/dolyNFT.png',
+                    description: 'TOKOROKOの生まれた地です。' +
+                        'どりーNFTをスクショしよう！！',
+                    badge: '/images/dolyNFT.png',
+                }
             ];
 
             locations.forEach((location) => {
@@ -71,7 +75,6 @@ export default function Map() {
                 });
             });
 
-            // 現在地
             const blueCircle = L.circleMarker([0, 0], {
                 radius: 8,
                 fillColor: '#007bff',
@@ -81,7 +84,6 @@ export default function Map() {
                 fillOpacity: 0.8,
             }).addTo(map);
 
-            // 現在地の追跡
             if (navigator.geolocation) {
                 const watchId = navigator.geolocation.watchPosition(
                     (position) => {
@@ -102,12 +104,10 @@ export default function Map() {
                     navigator.geolocation.clearWatch(watchId);
                 };
             }
+        } else if (activeTab === 'gallery') {
+            fetchGalleryImages();
         }
     }, [activeTab]);
-
-    const handleLogout = async () => {
-        await logout();
-    };
 
     const handleCloseDialog = () => {
         setSelectedLocation(null);
@@ -115,46 +115,99 @@ export default function Map() {
     };
 
     const handleShowBadge = async () => {
-        if (!session) {
-            alert('ログインが必要です');
+        if (!selectedLocation) {
+            alert('バッジを特定できませんでした。もう一度お試しください。');
+            console.error('selectedLocation が設定されていません。');
             return;
         }
 
         const userId = Cookies.get('uid');
 
-        // NFTのパスに基づいてNFT IDを取得
-        const { data: nftData, error: nftError } = await supabase
-            .from('nft')
-            .select('id')
-            .eq('image_path', selectedLocation.badge)
-            .single();
-
-        if (nftError || !nftData) {
-            console.error('NFT情報の取得に失敗しました:', nftError);
-            alert('バッジ情報を保存できませんでした');
+        if (!userId) {
+            alert('ユーザーIDが見つかりませんでした。再ログインしてください。');
+            console.error('ユーザーIDがクッキーから取得できませんでした。');
             return;
         }
 
-        // 中間テーブルに挿入
-        const { error: insertError } = await supabase
-            .from('nfts_users')
-            .insert({ user_id: userId, nft_id: nftData.id });
+        try {
+            const { data: nftData, error: nftError } = await supabase
+                .from('nft')
+                .select('id') // 必要な列 (id) のみ取得
+                .eq('image_path', selectedLocation.badge) // 選択されたバッジの image_path を基に検索
+                .limit(1); // 一致するデータが1つのみであることを期待
 
-        if (insertError) {
-            console.error('中間テーブルへの挿入に失敗しました:', insertError);
-            alert('バッジ情報を保存できませんでした');
+            if (nftError || !nftData || nftData.length === 0) {
+                console.error('NFT情報の取得に失敗しました:', nftError);
+                alert('バッジ情報を保存できませんでした');
+                return;
+            }
+
+            const nftId = nftData[0].id;
+
+            const { error: insertError } = await supabase
+                .from('nfts_users')
+                .insert({
+                    user_id: userId,
+                    nft_id: nftId,
+                });
+
+            if (insertError) {
+                console.error('nfts_usersテーブルへの挿入に失敗しました:', insertError);
+                alert('バッジ情報を保存できませんでした');
+                return;
+            }
+
+            setShowBadge(true);
+            setAnimateBadge(true);
+
+            // ギャラリー更新
+            fetchGalleryImages();
+        } catch (error) {
+            console.error('バッジ処理中にエラーが発生しました:', error);
+            alert('バッジ処理中に問題が発生しました。');
+        }
+    };
+
+    const fetchGalleryImages = async () => {
+        const userId = Cookies.get('uid');
+
+        if (!userId) {
+            alert('ユーザーIDが見つかりませんでした。再ログインしてください。');
+            console.error('ユーザーIDが見つかりません。');
             return;
         }
 
-        // アニメーション処理
-        setShowBadge(true);
-        setAnimateBadge(true);
+        try {
+            const { data: userNFTs, error: userNFTError } = await supabase
+                .from('nfts_users')
+                .select('nft_id')
+                .eq('user_id', userId);
+
+            if (userNFTError || !userNFTs) {
+                console.error('ユーザーNFTの取得に失敗しました:', userNFTError);
+                return;
+            }
+
+            const nftIds = userNFTs.map((nft) => nft.nft_id);
+            const { data: nftData, error: nftError } = await supabase
+                .from('nft')
+                .select('id, image_path')
+                .in('id', nftIds);
+
+            if (nftError || !nftData) {
+                console.error('NFT画像データの取得に失敗しました:', nftError);
+                return;
+            }
+
+            setGalleryImages(nftData);
+        } catch (error) {
+            console.error('ギャラリー画像の取得中にエラーが発生しました:', error);
+        }
     };
 
     const handleBadgeAnimationEnd = () => {
         setAnimateBadge(false);
         setShowBadge(false);
-        alert('バッジを保存しました！');
     };
 
     return (
@@ -172,17 +225,27 @@ export default function Map() {
             >
                 <button onClick={() => setActiveTab('map')}>マップ</button>
                 <button onClick={() => setActiveTab('gallery')}>ギャラリー</button>
-                <button onClick={handleLogout}>ログアウト</button>
+                <button onClick={logout}>ログアウト</button>
             </div>
             {activeTab === 'map' && <div id="map" style={{ height: '100%' }}></div>}
             {activeTab === 'gallery' && (
                 <div style={{ padding: '20px' }}>
                     <h2>ギャラリー</h2>
-                    {/* ギャラリーのコンテンツ */}
+                    <div className="gallery-grid">
+                        {galleryImages.map((nft) => (
+                            <div key={nft.id} className="gallery-item">
+                                <Image
+                                    src={nft.image_path}
+                                    alt={`NFT ID: ${nft.id}`}
+                                    width={200}
+                                    height={200}
+                                    className="gallery-image"
+                                />
+                            </div>
+                        ))}
+                    </div>
                 </div>
             )}
-
-            {/* ダイアログの表示 */}
             {selectedLocation && (
                 <div onClick={handleCloseDialog} className="dialog-overlay">
                     <div onClick={(e) => e.stopPropagation()} className="dialog-content">
@@ -191,21 +254,28 @@ export default function Map() {
                             src={selectedLocation.imageUrl}
                             alt={selectedLocation.name}
                             width={600}
-                            height={400}
+                            height={selectedLocation.imageUrl === "/images/dolyNFT.png" ? 600 : 400}
+
+
                         />
                         <p>{selectedLocation.description}</p>
-                        <button onClick={handleShowBadge} className="badge-button">バッジを表示</button>
+                        <button onClick={handleShowBadge} className="badge-button">バッジを保存</button>
                         {showBadge && (
                             <div className="badge-overlay">
-                                <div 
+                                <div
                                     className={`badge-container ${animateBadge ? "fadeInScale" : ""}`}
                                     onAnimationEnd={handleBadgeAnimationEnd}
                                 >
-                                    <Image src={selectedLocation.badge} alt="バッジ" width={325} height={300} className="badge" />
+                                    <Image
+                                        src={selectedLocation.badge}
+                                        alt="バッジ"
+                                        width={325}
+                                        height={300}
+                                        className="badge"
+                                    />
                                 </div>
                             </div>
                         )}
-
                         <button onClick={handleCloseDialog} className="close-button">閉じる</button>
                     </div>
                 </div>
