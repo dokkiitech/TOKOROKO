@@ -75,17 +75,17 @@ export async function signup(formData: FormData) {
 /**
  * ログアウト
  */
-// export async function logout() {
-//     const supabase = createClient();
+export async function logout() {
+    const supabase = createClient();
 
  
 
-//     await supabase.auth.signOut();
+    await supabase.auth.signOut();
 
   
 
 
         
-//     redirect('/login');
+    redirect('/login');
   
-// }
+}
