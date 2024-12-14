@@ -21,6 +21,7 @@ export default function Map() {
     const [activeTab, setActiveTab] = useState('map');
     const [selectedLocation, setSelectedLocation] = useState(null);
     const [showBadge, setShowBadge] = useState(false);
+    const [animateBadge, setAnimateBadge] = useState(false);
 
     useEffect(() => {
         if (activeTab === 'map') {
@@ -111,6 +112,12 @@ export default function Map() {
 
     const handleShowBadge = () => {
         setShowBadge(true);
+        setAnimateBadge(true); 
+    };
+
+    const handleBadgeAnimationEnd = () => {
+        setAnimateBadge(false);
+        setShowBadge(false); 
     };
 
     return (
@@ -151,7 +158,17 @@ export default function Map() {
                         />
                         <p>{selectedLocation.description}</p>
                         <button onClick={handleShowBadge} className="badge-button">バッジを表示</button>
-                        {showBadge && <Image src={selectedLocation.badge} alt="バッジ" width={100} height={100} />}
+                        {showBadge && (
+                            <div className="badge-overlay">
+                                <div 
+                                    className={`badge-container ${animateBadge ? "fadeInScale" : ""}`}
+                                    onAnimationEnd={handleBadgeAnimationEnd}
+                                >
+                                    <Image src={selectedLocation.badge} alt="バッジ" width={325} height={300} className="badge" />
+                                </div>
+                            </div>
+                        )}
+
                         <button onClick={handleCloseDialog} className="close-button">閉じる</button>
                     </div>
                 </div>
