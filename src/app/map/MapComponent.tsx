@@ -91,7 +91,7 @@ export default function Map() {
                         blueCircle.setLatLng([latitude, longitude]);
                     },
                     (error) => {
-                        console.error('Error getting location: ', error.message || error);
+                        console.error('Error getting location: ', error.message ? error.message : error);
                     },
                     {
                         enableHighAccuracy: true,
@@ -230,22 +230,26 @@ export default function Map() {
             {activeTab === 'map' && <div id="map" style={{ height: '100%' }}></div>}
             {activeTab === 'gallery' && (
                 <div style={{ padding: '20px' }}>
-                    <h2>ギャラリー</h2>
+                    <h2 className="gallery-title-heading">ギャラリー</h2>
                     <div className="gallery-grid">
                         {galleryImages.map((nft) => (
                             <div key={nft.id} className="gallery-item">
-                                <Image
-                                    src={nft.image_path}
-                                    alt={`NFT ID: ${nft.id}`}
-                                    width={200}
-                                    height={200}
-                                    className="gallery-image"
-                                />
+                                <div className="gallery-image-container">
+                                    <Image
+                                        src={nft.image_path}
+                                        alt={`NFT ID: ${nft.id}`}
+                                        width={240}
+                                        height={240}
+                                        className="gallery-image"
+                                    />
+                                </div>
                             </div>
                         ))}
                     </div>
                 </div>
             )}
+
+
             {selectedLocation && (
                 <div onClick={handleCloseDialog} className="dialog-overlay">
                     <div onClick={(e) => e.stopPropagation()} className="dialog-content">

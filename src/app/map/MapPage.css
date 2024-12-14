@@ -126,24 +126,102 @@
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
 }
 
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Noto Sans JP', sans-serif;
+    background: linear-gradient(135deg, #1e3c72, #2a5298, #191970); /* グラデーション背景を調整 */
+    background-size: 400% 400%; /* アニメーション用のサイズ */
+    animation: gradientShift 10s ease infinite; /* 背景を動かす */
+    color: #fff;
+    min-height: 100vh;
+}
+
+@keyframes gradientShift {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
 .gallery-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 16px;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 24px;
+    padding: 20px;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(0, 153, 255, 0.1)); /* 透明感のある背景 */
+    border-radius: 16px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    margin: 20px auto;
+    max-width: 1200px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: transform 0.3s ease-in-out;
+}
+
+.gallery-grid:hover {
+    transform: scale(1.02); /* ホバー時にわずかに拡大 */
+}
+
+.gallery-title-heading {
+    font-size: 48px;
+    font-weight: bold;
+    color: #fff;
+    text-align: center;
+    margin-bottom: 40px;
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.4), 0 0 10px rgba(0, 153, 255, 0.8);
+    font-family: 'Poppins', sans-serif;
+    letter-spacing: 2px;
+    background: linear-gradient(90deg, #ff7f50, #6a5acd, #1e90ff); /* ダイナミックなグラデーション */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: floatTitle 2s ease-in-out infinite alternate;
+}
+
+@keyframes floatTitle {
+    0% {
+        transform: translateY(-5px);
+    }
+    100% {
+        transform: translateY(5px);
+    }
 }
 
 .gallery-item {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    border: 1px solid #ddd;
-    padding: 8px;
-    border-radius: 8px;
-    background-color: #f9f9f9;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+    text-align: center;
+}
+
+.gallery-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3), 0 0 20px rgba(0, 153, 255, 0.7);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.3));
+}
+
+.gallery-image-container {
+    width: 100%;
+    overflow: hidden;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .gallery-image {
-    border-radius: 4px;
-    max-width: 100%;
+    width: 100%;
     height: auto;
+    transition: transform 0.3s ease;
+}
+
+.gallery-item:hover .gallery-image {
+    transform: scale(1.1);
 }
