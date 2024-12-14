@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-//import { logout } from '../login/actions';
+import { logout } from '../login/actionsLogout';
 import Image from 'next/image';
 import './MapPage.css';
 
@@ -20,6 +20,7 @@ L.Icon.Default.mergeOptions({
 export default function Map() {
     const [activeTab, setActiveTab] = useState('map');
     const [selectedLocation, setSelectedLocation] = useState(null);
+    const [showBadge, setShowBadge] = useState(false);
 
     useEffect(() => {
         if (activeTab === 'map') {
@@ -39,18 +40,21 @@ export default function Map() {
                     coords: [33.84786079278701, 130.79703742303604],
                     imageUrl: '/images/sarakurayama.jpg',
                     description: '皿倉山は福岡県北九州市にある山です。',
+                    badge: '/images/sarakura.png',
                 },
                 {
                     name: '糸島',
                     coords: [33.642520255780724, 130.2021625519222],
                     imageUrl: '/images/itoshima.jpg',
                     description: '糸島は美しい海岸線で知られる町です。',
+                    badge: '/images/itoshima.png',
                 },
                 {
                     name: '宮地嶽神社',
                     coords: [33.78003904204504, 130.48621472695646],
                     imageUrl: '/images/miyajidake.jpg',
                     description: '宮地嶽神社は光の道で有名な神社です。',
+                    badge: '/images/miyajidake.png',
                 },
             ];
 
@@ -102,6 +106,11 @@ export default function Map() {
 
     const handleCloseDialog = () => {
         setSelectedLocation(null);
+        setShowBadge(false);
+    };
+
+    const handleShowBadge = () => {
+        setShowBadge(true);
     };
 
     return (
@@ -141,6 +150,8 @@ export default function Map() {
                             height={400}
                         />
                         <p>{selectedLocation.description}</p>
+                        <button onClick={handleShowBadge} className="badge-button">バッジを表示</button>
+                        {showBadge && <Image src={selectedLocation.badge} alt="バッジ" width={100} height={100} />}
                         <button onClick={handleCloseDialog} className="close-button">閉じる</button>
                     </div>
                 </div>

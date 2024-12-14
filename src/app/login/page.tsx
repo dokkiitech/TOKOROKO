@@ -20,16 +20,7 @@ export default function LoginPage() {
         }
     };
 
-    const handleGithubLogin = async () => {
-        try {
-            const result = await githubLogin();
-            if (result?.url) {
-                window.location.href = result.url; // クライアントサイドでリダイレクト
-            }
-        } catch (error) {
-            console.error('GitHub login error:', error);
-        }
-    };
+    
 
     return (
         <div className="container">
@@ -58,9 +49,7 @@ export default function LoginPage() {
                     </div>
                 </form>
 
-                <div className="form-group">
-                    <button onClick={handleGithubLogin} className="button github-button">Log in with GitHub</button>
-                </div>
+           
 
                 <p className="text">
                     Not a member?{' '}
