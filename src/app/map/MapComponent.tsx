@@ -7,9 +7,6 @@ import { logout } from '../login/actions';
 import Image from 'next/image';
 import './MapPage.css';
 
-
-
-
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
     iconRetinaUrl:
@@ -36,7 +33,6 @@ export default function Map() {
                 attribution: '&copy; OpenStreetMap contributors',
             }).addTo(map);
 
-            
             const locations = [
                 {
                     name: '皿倉山',
@@ -59,8 +55,7 @@ export default function Map() {
             ];
 
             locations.forEach((location) => {
-                const marker = L.marker(location.coords)
-                    .addTo(map)
+                const marker = L.marker(location.coords).addTo(map);
 
                 marker.on('click', () => {
                     setSelectedLocation(location);
