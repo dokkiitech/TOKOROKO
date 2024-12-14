@@ -1,6 +1,6 @@
 import { type EmailOtpType } from '@supabase/supabase-js'
 import { type NextRequest, NextResponse } from 'next/server'
-
+import { revalidatePath } from 'next/cache'
 import { createClient } from '@/app/utils/supabase/server'
 
 // 確認処理
@@ -37,4 +37,22 @@ export async function GET(request: NextRequest) {
     // エラーページへリダイレクト
     redirectTo.pathname = '/error'
     return NextResponse.redirect(redirectTo)
+}
+
+export async function POST(req: NextRequest) {
+    const supabase = await createClient()
+
+    // Check if a user's logged in
+    const {
+        data: { user },
+    } = await supabase.auth.getUser()
+
+    if (user) {
+        await supabase.auth.signOut()
+    }
+
+    revalidatePath('/', 'layout')
+    return NextResponse.redirect(new URL('/login', req.url), {
+        status: 302,
+    })
 }

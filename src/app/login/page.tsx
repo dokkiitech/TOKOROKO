@@ -44,13 +44,13 @@ export default function LoginPage() {
                     await handleLogin(formData);
                 }}>
                     <div className="form-group">
-                        <label htmlFor="login-email" className="label">Email address</label>
-                        <input id="login-email" name="email" type="email" autoComplete="email" required className="input" />
+                        <label htmlFor="email" className="label">Email address</label>
+                        <input id="email" name="email" type="email" autoComplete="email" required className="input" />
                     </div>
 
                     <div className="form-group">
-                        <label htmlFor="login-password" className="label">Password</label>
-                        <input id="login-password" name="password" type="password" autoComplete="current-password" required className="input" />
+                        <label htmlFor="password" className="label">Password</label>
+                        <input id="password" name="password" type="password" autoComplete="current-password" required className="input" />
                     </div>
 
                     <div className="form-group">
@@ -75,13 +75,13 @@ export default function LoginPage() {
                     await handleSignup(formData);
                 }}>
                     <div className="form-group">
-                        <label htmlFor="signup-email" className="label">Email address</label>
-                        <input id="signup-email" name="email" type="email" autoComplete="email" required className="input" />
+                        <label htmlFor="email" className="label">Email address</label>
+                        <input id="email" name="email" type="email" autoComplete="email" required className="input" />
                     </div>
 
                     <div className="form-group">
-                        <label htmlFor="signup-password" className="label">Password</label>
-                        <input id="signup-password" name="password" type="password" autoComplete="current-password" required className="input" />
+                        <label htmlFor="password" className="label">Password</label>
+                        <input id="password" name="password" type="password" autoComplete="current-password" required className="input" />
                     </div>
 
                     <div className="form-group">

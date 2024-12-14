@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
     experimental: {
-        serverActions: {}, // 空のオブジェクトを指定
+        serverActions: {}, 
     },
     async redirects() {
         return [
@@ -13,7 +13,10 @@ const nextConfig: NextConfig = {
             },
         ];
     },
-    // 他のオプションをここに記述
 };
+
+
+// console.log('NEXT_PUBLIC_SUPABASE_URL:', process.env.NEXT_PUBLIC_SUPABASE_URL);
+// console.log('NEXT_PUBLIC_SUPABASE_ANON_KEY:', process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
 
 export default nextConfig;
