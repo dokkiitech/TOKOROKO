@@ -6,7 +6,7 @@ import 'leaflet/dist/leaflet.css';
 import { logout } from '../login/actions';
 import Image from 'next/image';
 import './MapPage.css';
-import dynamic from 'next/dynamic';
+
 
 
 
@@ -146,7 +146,6 @@ export default function Map() {
                             height={400}
                         />
                         <p>{selectedLocation.description}</p>
-                        <button onClick="">バッジ</button>
                         <button onClick={handleCloseDialog} className="close-button">閉じる</button>
                     </div>
                 </div>
