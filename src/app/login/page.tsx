@@ -1,6 +1,6 @@
 'use client';
 
-import { login, signup, githubLogin } from './actions';
+import { login, signup } from './actions';
 import './LoginPage.css';
 
 export default function LoginPage() {

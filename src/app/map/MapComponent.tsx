@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { logout } from '../login/actions';
+//import { logout } from '../login/actions';
 import Image from 'next/image';
 import './MapPage.css';
 

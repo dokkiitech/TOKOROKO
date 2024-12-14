@@ -3,84 +3,89 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { createClient } from '@/app/utils/supabase/server';
 
-/**
- * ログイン
- */
+
+
 export async function login(formData: FormData) {
-    const supabase = createClient();
+    const supabase = await createClient()
 
+    // type-casting here for convenience
+    // in practice, you should validate your inputs
     const data = {
         email: formData.get('email') as string,
         password: formData.get('password') as string,
-    };
+    }
 
-  
-    await supabase.auth.signInWithPassword(data);
-    
+    const { error } = await supabase.auth.signInWithPassword(data)
+
+    if (error) {
+        redirect('/error')
+    }
+
    
-    console.log('Login successful, redirecting to /map');
-    redirect('/map');
-   
+    redirect('/map')
 }
 
-/**
- * サインアップ
- */
 export async function signup(formData: FormData) {
-    const supabase = createClient();
+    const supabase = await createClient()
 
+    // type-casting here for convenience
+    // in practice, you should validate your inputs
     const data = {
         email: formData.get('email') as string,
         password: formData.get('password') as string,
-    };
+    }
 
+    const { error } = await supabase.auth.signUp(data)
 
-    await supabase.auth.signUp(data);
-      
-    redirect('/map');
- 
+    if (error) {
+        redirect('/error')
+    }
+
+    redirect('/map')
 }
+
+
 
 /**
  * GitHubソーシャルログイン
  */
-export async function githubLogin() {
-    const supabase = createClient();
+// export async function githubLogin() {
+//     const supabase = createClient();
 
     
 
-    const { data, error } = await supabase.auth.signInWithOAuth({
-        provider: 'github',
-        options: {
-            redirectTo: 'http://localhost:3000/map',
-        }
-    });
+//     const { data, error } = await supabase.auth.signInWithOAuth({
+//         provider: 'github',
+//         options: {
+//             redirectTo: 'http://localhost:3000/map',
+//         }
+//     });
 
-    if (error) {
+//     if (error) {
 
-        redirect('/error');
-    } else if (data?.url) {
+//         redirect('/error');
+//     } else if (data?.url) {
 
-        // サーバー側でリダイレクトを行わないようにしてURLを返す
-        return { url: data.url };
-    }
+//         // サーバー側でリダイレクトを行わないようにしてURLを返す
+//         return { url: data.url };
+//     }
  
-}
+// }
 
 /**
  * ログアウト
  */
-export async function logout() {
-    const supabase = createClient();
+// export async function logout() {
+//     const supabase = createClient();
 
  
 
-    await supabase.auth.signOut();
+//     await supabase.auth.signOut();
 
   
 
 
         
-    redirect('/login');
+//     redirect('/login');
   
-}
+// }
