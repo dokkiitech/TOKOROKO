@@ -266,20 +266,10 @@ export default function Map() {
 
     return (
         <div style={{ position: 'relative', height: '100vh' }}>
-            <div
-                style={{
-                    position: 'absolute',
-                    top: '10px',
-                    right: '10px',
-                    zIndex: 1000,
-                    display: 'flex',
-                    flexDirection: 'row',
-                    gap: '10px',
-                }}
-            >
-                <button onClick={() => setActiveTab('map')} style={{ backgroundColor: activeTab === 'map' ? 'blue' : 'gray', color: 'white' }}>マップ</button>
-                <button onClick={() => setActiveTab('gallery')} style={{ backgroundColor: activeTab === 'gallery' ? 'blue' : 'gray', color: 'white' }}>ギャラリー</button>
-                <button onClick={logout} style={{ backgroundColor: 'red', color: 'white' }}>ログアウト</button>
+            <div className="button-container">
+                <button onClick={() => setActiveTab('map')} style={{ backgroundColor: activeTab === 'map' ? 'blue' : 'gray', color: 'white', padding: '10px 20px' }}>マップ</button>
+                <button onClick={() => setActiveTab('gallery')} style={{ backgroundColor: activeTab === 'gallery' ? 'blue' : 'gray', color: 'white', padding: '10px 20px' }}>ギャラリー</button>
+                <button onClick={() => logout()} style={{ backgroundColor: 'red', color: 'white', padding: '10px 20px' }}>ログアウト</button>
             </div>
             {activeTab === 'map' && <div id="map" style={{ height: '100%', width: '100%', position: 'absolute', zIndex: 0 }}></div>}
             {activeTab === 'gallery' && (

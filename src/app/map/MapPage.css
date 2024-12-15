@@ -234,3 +234,62 @@ body {
 .gallery-item:hover .gallery-image {
     transform: scale(1.1);
 }
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+    .dialog-content {
+        max-width: 90%;
+        padding: 10px;
+        overflow-y: auto;
+        /* 縦スクロールを追加 */
+        max-height: 80vh;
+        /* 最大高さを設定 */
+    }
+
+    .dialog-content img {
+        max-width: 100%;
+        height: auto;
+    }
+
+
+    .gallery-title-heading {
+        font-size: 20px;
+        margin-top: 60px; /* タイトルの上にスペースを追加 */
+    }
+
+    .gallery-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 10px;
+    }
+
+    .gallery-image-container {
+        width: 100%;
+    }
+
+    .gallery-image {
+        width: 100%;
+        height: auto;
+    }
+
+    .badge-button, .close-button {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+
+    .badge-container {
+        width: 80%;
+        height: auto;
+    }
+
+    .button-container {
+        position: fixed;
+        top: 10px;
+        right: 10px;
+        z-index: 1000;
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+}
