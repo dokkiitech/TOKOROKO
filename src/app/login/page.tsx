@@ -1,9 +1,12 @@
 'use client';
 
+import { useState } from 'react';
 import { login, signup } from './actions';
 import './LoginPage.css';
 
 export default function LoginPage() {
+    const [alertMessage, setAlertMessage] = useState('');
+
     const handleLogin = async (formData: FormData) => {
         try {
             await login(formData);
@@ -14,16 +17,16 @@ export default function LoginPage() {
 
     const handleSignup = async (formData: FormData) => {
         try {
-            await signup(formData);
+            const message = await signup(formData);
+            setAlertMessage(message);
         } catch (error) {
             console.error('Signup error:', error);
         }
     };
 
-    
-
     return (
         <div className="container">
+            {alertMessage && <div className="alert">{alertMessage}</div>}
             <div className="logo-container">
                 <h2 className="title">Sign in to your account</h2>
             </div>
@@ -48,8 +51,6 @@ export default function LoginPage() {
                         <button type="submit" className="button">Log in</button>
                     </div>
                 </form>
-
-           
 
                 <p className="text">
                     Not a member?{' '}

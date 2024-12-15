@@ -36,7 +36,7 @@ export async function signup(formData: FormData) {
         redirect('/error');
     }
 
-    redirect('/map');
+    return 'Check your email for the confirmation link to complete your registration.';
 }
 
 export async function logout() {
