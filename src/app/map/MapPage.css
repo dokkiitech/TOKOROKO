@@ -104,6 +104,7 @@
     0% {
         transform: rotateY(0deg);
     }
+
     100% {
         transform: rotateY(360deg);
     }
@@ -130,9 +131,12 @@ body {
     margin: 0;
     padding: 0;
     font-family: 'Noto Sans JP', sans-serif;
-    background: linear-gradient(135deg, #1e3c72, #2a5298, #191970); /* グラデーション背景を調整 */
-    background-size: 400% 400%; /* アニメーション用のサイズ */
-    animation: gradientShift 10s ease infinite; /* 背景を動かす */
+    background: linear-gradient(135deg, #1e3c72, #2a5298, #191970);
+    /* グラデーション背景を調整 */
+    background-size: 400% 400%;
+    /* アニメーション用のサイズ */
+    animation: gradientShift 10s ease infinite;
+    /* 背景を動かす */
     color: #fff;
     min-height: 100vh;
 }
@@ -141,9 +145,11 @@ body {
     0% {
         background-position: 0% 50%;
     }
+
     50% {
         background-position: 100% 50%;
     }
+
     100% {
         background-position: 0% 50%;
     }
@@ -155,7 +161,8 @@ body {
     gap: 24px;
     padding: 20px;
     justify-content: center;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(0, 153, 255, 0.1)); /* 透明感のある背景 */
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(0, 153, 255, 0.1));
+    /* 透明感のある背景 */
     border-radius: 16px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
     margin: 20px auto;
@@ -165,7 +172,8 @@ body {
 }
 
 .gallery-grid:hover {
-    transform: scale(1.02); /* ホバー時にわずかに拡大 */
+    transform: scale(1.02);
+    /* ホバー時にわずかに拡大 */
 }
 
 .gallery-title-heading {
@@ -177,7 +185,8 @@ body {
     text-shadow: 0 4px 8px rgba(0, 0, 0, 0.4), 0 0 10px rgba(0, 153, 255, 0.8);
     font-family: 'Poppins', sans-serif;
     letter-spacing: 2px;
-    background: linear-gradient(90deg, #ff7f50, #6a5acd, #1e90ff); /* ダイナミックなグラデーション */
+    background: linear-gradient(90deg, #ff7f50, #6a5acd, #1e90ff);
+    /* ダイナミックなグラデーション */
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     animation: floatTitle 2s ease-in-out infinite alternate;
@@ -187,6 +196,7 @@ body {
     0% {
         transform: translateY(-5px);
     }
+
     100% {
         transform: translateY(5px);
     }
