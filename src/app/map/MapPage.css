@@ -131,8 +131,8 @@ body {
     margin: 0;
     padding: 0;
     font-family: 'Noto Sans JP', sans-serif;
-    background: linear-gradient(135deg, #1e3c72, #2a5298, #191970);
-    /* グラデーション背景を調整 */
+    background: linear-gradient(135deg, #000000, #434343, #000000);
+    /* 上品なブラックのグラデーション */
     background-size: 400% 400%;
     /* アニメーション用のサイズ */
     animation: gradientShift 10s ease infinite;
@@ -182,11 +182,10 @@ body {
     color: #fff;
     text-align: center;
     margin-bottom: 40px;
-    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.4), 0 0 10px rgba(0, 153, 255, 0.8);
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 0 10px rgba(255, 255, 255, 0.8);
     font-family: 'Poppins', sans-serif;
     letter-spacing: 2px;
-    background: linear-gradient(90deg, #ff7f50, #6a5acd, #1e90ff);
-    /* ダイナミックなグラデーション */
+    background: linear-gradient(90deg, #ffffff, #dcdcdc, #f5f5f5);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     animation: floatTitle 2s ease-in-out infinite alternate;

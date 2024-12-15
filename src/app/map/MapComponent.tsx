@@ -70,8 +70,8 @@ export default function Map() {
                             },
                             {
                                 enableHighAccuracy: true,
-                                maximumAge: 0,
-                                timeout: 10000,
+                                maximumAge: 60000,
+                                timeout: 30000,
                             }
                         );
 
